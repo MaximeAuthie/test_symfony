@@ -1,0 +1,21 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Ajouter catégorie{% endblock %}
+
+{% block body %}
+    <div class="card mx-auto w-50 bg-light bg-gradient mt-5">
+        <h1 class="text-center mt-5 mb-5">Ajouter une catégorie</h1>
+        <div class="w-75 mx-auto">
+            {{ form_start(form) }}
+                {{ form_rest(form) }} {# Mise en place d'un token pour chiffrer le form #}
+            {{ form_end(form) }} {# 'form est ici la variable qui povient de la route renseignée dans CategotyController.php#}
+        </div>
+    </div>
+
+    {% if message %} {# 'message est ici la variable qui povient de la route renseignée dans CategotyController.php #}
+        <div class="alert alert-dismissible alert-success w-50 mx-auto mt-5">
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+            <strong>{{ message }}</strong>.
+        </div>
+    {% endif %}
+{% endblock %}

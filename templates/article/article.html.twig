@@ -1,0 +1,24 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Article{% endblock %}
+
+{% block body %}
+    <div class="card mx-auto w-50 bg-light bg-gradient mt-5">
+        <div class="card-header">
+            <h5 class="card-title text-uppercase text-danger text-center">{{article.id}} - {{article.titre}}</h5>
+        </div>
+        
+        <div class="card-body">
+            <h6 class="card-subtitle mb-2 text-body-secondary text-center">{{article.date | date ('d-m-Y')}}</h6>{#C'est un objet et pas un string, donc il faut changer sa MEF#}
+            <h6 class="card-subtitle mb-2 text-body-secondary text-center">{{article.user.nom | upper}} {{article.user.prenom}}</h6> {# user est un objet, donc il faut préciser quelle propriété on veut afficher (id, nom, prenom, mail...) UPPER est un filtre pour mettre en majuscule #}
+            <p class="card-text text-center">{{ article.contenu }}</p>
+            <div class="text-center">
+                {% for cat in article.categories %}
+                    <span class="badge rounded-pill bg-danger">{{ cat.nom }}</span>
+                {% endfor %}
+                <h6 class="card-subtitle mb-2 text-body-secondary text-center"></h6><a href="{{ path('app_article_update', {'id':article.id}) }}">Modifier l'article</a></h6>
+            </div>
+            
+        </div>
+    </div>
+{% endblock %}
