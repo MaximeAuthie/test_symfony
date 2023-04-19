@@ -32,7 +32,10 @@ security:
     # Note: Only the *first* access control that matches will be used
     access_control:
         # - { path: ^/admin, roles: ROLE_ADMIN }
-        # - { path: ^/profile, roles: ROLE_USER }
+        - { path: ^/article/add, roles: ROLE_USER } # //!On liste ici les routes autorisée en fonction du rôle de l'utilisateur
+        - { path: ^/article/update, roles: ROLE_USER }
+        - { path: ^/categorie/add, roles: ROLE_USER }
+        - { path: ^/categorie/update, roles: ROLE_USER }
 
 when@test:
     security:
@@ -43,6 +46,6 @@ when@test:
             # reduces the work factor to the lowest possible values.
             Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface:
                 algorithm: auto
-                cost: 4 # Lowest possible value for bcrypt
+                cost: 10 # Lowest possible value for bcrypt
                 time_cost: 3 # Lowest possible value for argon
                 memory_cost: 10 # Lowest possible value for argon
