@@ -7,21 +7,26 @@
       <div class="collapse navbar-collapse" id="navbarColor01">
         <ul class="navbar-nav me-auto">
           <li class="nav-item">
-            <a class="nav-link active" href="{{ path('app_home') }}">Home
-              <span class="visually-hidden">(current)</span>
-            </a>
+            <a class="nav-link" href="{{ path('app_home') }}">Home</a>
           </li>
-          <li class="nav-item">
-            <a class="nav-link" href="{{ path('app_article_all') }}">Articles</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="{{ path('app_article_add') }}">Ajouter article</a> {# Lien vers le formulaire de création d'un article #}
-          </li>
-            <a class="nav-link" href="{{ path('app_category_all') }}">Catégories</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="{{ path('app_category_add') }}">Ajouter catégorie</a> {# Lien vers le formulaire de création d'un article #}
-          </li>
+          {% if app.user.userIdentifier is defined %}
+            <li class="nav-item">
+              <a class="nav-link" href="{{ path('app_article_all') }}">Articles</a>
+            </li>
+              <a class="nav-link" href="{{ path('app_category_all') }}">Catégories</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="{{ path('app_logout') }}">Déconnexion</a> {# Lien vers le formulaire de création d'un article #}
+            </li>
+          {% else %}
+            <li class="nav-item">
+              <a class="nav-link active" href="{{ path('app_register') }}">Inscription
+                <span class="visually-hidden">(current)</span>
+              </a>
+            </li>
+              <a class="nav-link" href="{{ path('app_login') }}">Connexion</a>
+            </li>
+          {% endif %}
       </div>
     </div>
 </nav>
