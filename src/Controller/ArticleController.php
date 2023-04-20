@@ -18,7 +18,11 @@ class ArticleController extends AbstractController //permet par exemple de récu
     #[Route('/article', name: 'app_article')]
     public function index(): Response
     {
+        $tva= $this->getParameter('tva'); //! Ici on récupère une variable d'envoironnement pour test
+        $auteur= $this->getParameter('auteur'); //! Ici on récupère une variable d'envoironnement pour test
         return $this->render('article/index.html.twig', [
+            'data1'=>$tva,
+            'data2'=>$auteur
         ]);
     }
     #[Route('/article/all', name: 'app_article_all')]
