@@ -19,24 +19,23 @@ class UserType extends AbstractType
         $builder
             ->add('email', EmailType::class, [ // faire ctrl+i sur le Type::class pour afficher le use et cliquer dessus pour le mettre directement ci-dessus
                 'label' => 'Votre mail',
-                'attr'=>['class' => 'form-control'],
+                'attr'=>['class' => 'form-control mb-3'],
                 'required'=>true
             ])
             ->add('password', RepeatedType::class, [
                 'type' => PasswordType::class,
-                'first_options'  => ['label' => 'Saisir un mot de passe', 'hash_property_path' => 'password'],
-                'second_options' => ['label' => 'Saisir à nouveau votre mot de passe'],
-                'attr'=>['class' => 'form-control'],
+                'first_options'  => ['label' => 'Saisir un mot de passe', 'hash_property_path' => 'password', 'attr'=>['class' => 'form-control mb-3'] ],
+                'second_options' => ['label' => 'Saisir à nouveau votre mot de passe','attr'=>['class' => 'form-control mb-3']],
                 'mapped' => false,
             ])
             ->add('nom', TextType::class, [
                 'label' => 'Votre nom',
-                'attr'=>['class' => 'form-control'],
+                'attr'=>['class' => 'form-control mb-3'],
                 'required'=>true
             ])
             ->add('prenom', TextType::class, [
                 'label' => 'Votre prénom',
-                'attr'=>['class' => 'form-control'],
+                'attr'=>['class' => 'form-control mb-3'],
                 'required'=>true
             ])
             ->add('Valider', SubmitType::class, [

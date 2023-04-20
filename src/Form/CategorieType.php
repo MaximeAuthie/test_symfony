@@ -6,8 +6,8 @@ use App\Entity\Category;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
-use Symfony\Component\Form\Extension\Core\Type\SubmitType;
-use Symfony\Component\Form\Extension\Core\Type\TextType;
+use Symfony\Component\Form\Extension\Core\Type\SubmitType; // à importer pour pouvoir spécifier le type de chaque champs
+use Symfony\Component\Form\Extension\Core\Type\TextType; // à importer pour pouvoir spécifier le type de chaque champs
 
 class CategorieType extends AbstractType
 {
