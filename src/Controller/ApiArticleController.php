@@ -67,7 +67,7 @@ class ApiArticleController extends AbstractController
                     [] ); //passer le curseur sur 'json' pour voir le détail des paramètres à passer 
             }
 
-            //?On sérialise le json (on le change de format json -> tableau)
+            //?On sérialise le json (on le change de format json -> tableau en stockant le résultat dans une variable)
             $data = $serialize->decode($json, 'json'); //variable, format //! Voir la doc symfony qui explique très bien tout ça
 
 
@@ -134,13 +134,66 @@ class ApiArticleController extends AbstractController
                 ['Content-Type'=>'application/json','Access-Control-Allow-Origin' =>'localhost', 'Access-Control-Allow-Method' => 'GET'], //renvoie du json, uniquement depuis local host, et uniquelent sous forme de GET
                 []); //tableau vide car pas de groupe
 
-        } catch (\Exception $error) { //gestion des autres erreurs non prévues avec du json
+        } catch (\Exception $error) { //gestion des autres erreurs non prévues avec du json (champs vide ou syntax error par exemple)
             return $this->json(
                 ['erreur'=> 'Etat du json : '.$error->getMessage()],
-                200, 
+                400, 
                 ['Content-Type'=>'application/json','Access-Control-Allow-Origin' =>'localhost', 'Access-Control-Allow-Method' => 'GET'], //renvoie du json, uniquement depuis local host, et uniquelent sous forme de GET
                 []); //tableau vide car pas de groupe 
         }
     }
+
+    #[ROUTE('api/article/delete', name:"app_api_article_json_delete", methods: 'DELETE')] //Méthode pour supprimer un article en avoyant son id dans un json au lieu de l'URL
+    public function deleteArticleJson(ArticleRepository $articleRepo, EntityManagerInterface $em, Request $request, SerializerInterface $serialize ) {
+
+        try {
+            //récupérer le contenu du json
+            $json = $request->getContent();
+
+            //?On vérifie si le json n'est pas vide
+            if (!$json) {
+                return $this->json(
+                    ['Erreur' => 'Le json est vide ou n\'esiste pas.'],
+                    400, //!Voir la liste de code erreur html sud wikipedia
+                    ['Content-Type'=>'application/json','Access-Control-Allow-Origin' =>'localhost', 'Access-Control-Allow-Method' => 'GET'], 
+                    [] ); //passer le curseur sur 'json' pour voir le détail des paramètres à passer 
+            }
+
+            //?On sérialise le json (on le change de format json -> tableau en stockant le résultat dans une variable)
+            $data = $serialize->decode($json, 'json'); //variable, format //! Voir la doc symfony qui explique très bien tout ça
+
+            //On recherche l'article dans la BDD
+            $article = $articleRepo->findOneBy(['id'=>$data['id']]);
+
+            //Si l'article demandé n'existe pas dans la BDD
+            if (!isset($article)) {
+                return $this->json(
+                    ['erreur'=> 'L\'article N°'.$data['id'].' n\'existe pas dans la BDD.'],
+                    400, 
+                    ['Content-Type'=>'application/json','Access-Control-Allow-Origin' =>'localhost', 'Access-Control-Allow-Method' => 'GET'], //renvoie du json, uniquement depuis local host, et uniquelent sous forme de GET
+                    []);
+            }
+
+            //Si l'article existe dans la BDD
+                $em->remove($article);
+                $em->flush();
+                return $this->json(
+                    ['erreur'=> 'L\'article '.$article->getTitre().' a bien été supprimé de la BDD.'],
+                    200, 
+                    ['Content-Type'=>'application/json','Access-Control-Allow-Origin' =>'localhost', 'Access-Control-Allow-Method' => 'GET'], //renvoie du json, uniquement depuis local host, et uniquelent sous forme de GET
+                    []);
+
+        } catch (\Exception $error) { //Gestion des erreurs inattendues
+            return $this->json(
+                ['erreur'=> 'Erreur : '.$error->getMessage()],
+                500, 
+                ['Content-Type'=>'application/json','Access-Control-Allow-Origin' =>'localhost', 'Access-Control-Allow-Method' => 'GET'], //renvoie du json, uniquement depuis local host, et uniquelent sous forme de GET
+                []); 
+        }
+        
+    }
+
+    #[ROUTE('api/article/delete/{id}', name:"app_api_article_delete", methods: 'DELETE')]
+   
 }
 ?>
