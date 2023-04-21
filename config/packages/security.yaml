@@ -31,11 +31,12 @@ security:
     # Easy way to control access for large sections of your site
     # Note: Only the *first* access control that matches will be used
     access_control:
-        # - { path: ^/admin, roles: ROLE_ADMIN }
+        - { path: ^/prout, roles: ROLE_ADMIN } #//! Ici on limite l'accès du panel admin aux user qui ont le rôle admin
         - { path: ^/article/add, roles: ROLE_USER } # //!On liste ici les routes autorisée en fonction du rôle de l'utilisateur
         - { path: ^/article/update, roles: ROLE_USER }
         - { path: ^/categorie/add, roles: ROLE_USER }
         - { path: ^/categorie/update, roles: ROLE_USER }
+        
 
 when@test:
     security:

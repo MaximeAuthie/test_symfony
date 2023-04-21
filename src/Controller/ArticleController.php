@@ -24,7 +24,18 @@ class ArticleController extends AbstractController //permet par exemple de récu
             'data1'=>$tva,
             'data2'=>$auteur
         ]);
+
     }
+
+    #[Route('/article/fetch', name: 'app_article_fetch')]
+    public function indexFetch(): Response
+    {
+        return $this->render('article/article.api.html.twig', [
+
+        ]);
+    }
+
+
     #[Route('/article/all', name: 'app_article_all')]
     public function showAllArticles(ArticleRepository $articleRepository):Response { //on passe le repository en param et on le stocke dans une variable pour instancier la classe du repository
         //Récupérer dans un tableau tous les articles
