@@ -54,7 +54,7 @@ class RegisterController extends AbstractController
 
                 $em->persist($user); //on fait persister les données
                 $em->flush(); //on envoie les données en BDD
-                $message = 'Bienvenue '.$user->getNom().'. Votre compte a bien été créée';
+                $message = 'Bienvenue '.$user->getPrenom().'. Votre compte a bien été créée';
             } else {
                 $message = 'L\'adresse mail'.$user->getEmail().'est déjà associée à un compte existant';
             }
