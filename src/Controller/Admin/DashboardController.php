@@ -29,9 +29,9 @@ class DashboardController extends AbstractDashboardController
             ->setTitle('Test Projet J2');
     }
 
-    public function configureMenuItems(): iterable
+    public function configureMenuItems(): iterable //! Ici on paramètre le menu de droite du panel admin
     {
-        yield MenuItem::linkToDashboard('Dashboard', 'fa fa-home');
+        yield MenuItem::linkToDashboard('Dashboard', 'fa fa-home', 'app_home'); //! On spécifie le nom de la route (app_home) pour retourner vers la page d'accueil du site client
         yield MenuItem::linkToCrud('Articles', 'fas fa-list', Article::class); //! ('nom du menu','icone font awesome', classe)
         yield MenuItem::linkToCrud('Catérogies', 'fas fa-newspaper', Category::class);
         yield MenuItem::linkToCrud('Utilisateurs', 'fas fa-users', User::class);
