@@ -265,7 +265,7 @@ class ApiArticleController extends AbstractController
             //? Vérifier si l'article existe
             if(!$article) {
                 return $this->json(
-                    ['Erreur' => 'L\'article '.$data['titre'].' n\'esiste pas dans la BDD.'],
+                    ['Erreur' => 'L\'article '.$data['titre'].' n\'existe pas dans la BDD.'],
                     400, //!Voir la liste de code erreur html sud wikipedia
                     ['Content-Type'=>'application/json','Access-Control-Allow-Origin' =>'localhost', 'Access-Control-Allow-Method' => 'GET'], 
                     [] ); 
