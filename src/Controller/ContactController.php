@@ -11,9 +11,8 @@ use App\Form\ContactType;
 use App\Repository\ContactRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use App\Service\Utils;
-use App\Service\Messagerie;
+use App\Service\Messagerie; //Pour utiliser la méthode sendMail() de la classe Messagerie
 use Doctrine\ORM\EntityManager;
-
 
 class ContactController extends AbstractController {
     #[Route('/contact', name: 'app_contact')]
@@ -25,8 +24,9 @@ class ContactController extends AbstractController {
     }
 
     #[Route('/contact/form', name: 'app_contact')]
-    public function addContact(Request $request, EntityManagerInterface $entityManager): Response {
+    public function addContact(Request $request, EntityManagerInterface $entityManager, Messagerie $messagerie): Response {
         $message = '';
+        $mailStatus = '';
 
         // On instancie un objet contact
         $contact = new Contact;
@@ -45,20 +45,40 @@ class ContactController extends AbstractController {
             $contact->setObjet(Utils::cleanInputStatic($request->request->all('contact')['objet']));
             $contact->setContenu(Utils::cleanInputStatic($request->request->all('contact')['contenu']));
 
-            // On flush et persist les données
+            // On essaie de flush et persist les données
             try {
                 $entityManager->persist($contact); //on fait persister les données
                 $entityManager->flush(); //on envoie les données en BDD
-                $message = 'Votre message a bien été envoyé';
+                $message = 'Votre message a bien été envoyé'; //on implémente le message de réussite dans la variable $massage
+
+                // On récupère les variables d'authentification du serveur mail pour utiliser la méthode sendMail() de la classe Messagerie
+                $login = $this->getParameter('accountmail'); //getParamater() est une méthode de la classe native AbstractController
+                $password = $this->getParameter('passmail');
+
+                // Variable pour l'envoi du mail 
+                $date = $contact->getDate()->format('d-m-Y'); //La date est un objet, on la formate donc en string
+                $objet = $contact->getObjet();
+                $content = '<p>Nom : <strong>'.mb_convert_encoding($contact->getNom(), 'ISO-8859-1', 'UTF-8').'</strong></p><hr>'. //On utilise .mb_conver_encoding() pour que kes accents et caractères spéciaux soit bien affichés dans le mail
+                '<p>Prenom : <strong>'.mb_convert_encoding($contact->getPrenom(), 'ISO-8859-1', 'UTF-8').'</strong></p><hr>'.
+                '<p>Mail : <strong>'.mb_convert_encoding($contact->getMail(), 'ISO-8859-1', 'UTF-8').'</strong></p><hr>'.
+                '<p>Contenu : <strong>'.mb_convert_encoding($contact->getContenu(), 'ISO-8859-1', 'UTF-8').'</strong></p><hr>'.
+                '<p>Date envoi : <strong>'.$date.'</strong></p><hr>';
+                $destinataire = 'authie.maxime@orange.fr';
+
+                // On récupère le statut via la fonction sendMail(variables en param) qui retourne un message
+                $mailStatus = $messagerie->sendMail($login, $password,  $destinataire, $objet, $content,);
+
+            //En cas d'échec du persist ou du flush, on renvoie un message d'erreur
             } catch (\Exception $error) {
-                $message = 'Une erreur s\'est produite lors de l\'envoi de votre message';
+                $message = $error;
             }
         }
 
         // On retourne le rendu pour l'interface TWIG
         return $this->render('contact/index.html.twig', [
             'message' => $message,
-            'form' => $form->createView()
+            'form' => $form->createView(),
+            'status' => $mailStatus // pour renvoyé le message de confirmation/erreur de l'envoi de mail
         ]);
     }
 }
