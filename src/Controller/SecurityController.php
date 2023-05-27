@@ -15,13 +15,23 @@ class SecurityController extends AbstractController
         // if ($this->getUser()) {
         //     return $this->redirectToRoute('target_path');
         // }
+        $message ='';
+        
+        // On regarde si on récupère une erreur qui témoigne que le compte de l'utilisateur n'est pas activé (depuis la route 'app_send_activate)
+        if(isset($_GET['error']) AND $_GET['error'] ==1) {
+            $message = 'Veuillez d\'abord activer votre compte';
+        }
 
         // get the login error if there is one
         $error = $authenticationUtils->getLastAuthenticationError();
         // last username entered by the user
         $lastUsername = $authenticationUtils->getLastUsername();
 
-        return $this->render('security/login.html.twig', ['last_username' => $lastUsername, 'error' => $error]);
+        return $this->render('security/login.html.twig', [
+            'last_username' => $lastUsername,
+            'error' => $error,
+            'message' => $message
+        ]);
     }
 
     #[Route(path: '/logout', name: 'app_logout')]

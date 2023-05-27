@@ -44,6 +44,9 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\OneToMany(mappedBy: 'User', targetEntity: Article::class)]
     private Collection $articles;
 
+    #[ORM\Column]
+    private ?bool $activate = null; //Pour que le champs soit à 0 par défaut : aller dans php my admin et mettre en valeur 'tel que définit' à 0
+
     public function __construct()
     {
         $this->articles = new ArrayCollection();
@@ -176,5 +179,17 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function __toString() //Méthode déjà existant qu'il faut définir pour fixer son contenu => renvoie sous forme de string des éléments d'un objet
     {
         return $this->nom.' '.$this->prenom;
+    }
+
+    public function isActivate(): ?bool
+    {
+        return $this->activate;
+    }
+
+    public function setActivate(bool $activate): self
+    {
+        $this->activate = $activate;
+
+        return $this;
     }
 }
