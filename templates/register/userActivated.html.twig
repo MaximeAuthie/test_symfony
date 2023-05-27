@@ -1,0 +1,18 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Inscription{% endblock %}
+
+{% block body %}
+    {% if message == 'Votre compte a été activé avec succès' %} {# 'message est ici la variable qui povient de la route renseignée dans CategotyController.php #}
+    <div class="alert alert-dismissible alert-success w-50 mx-auto mt-5 text-center">
+        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        <strong>{{ message }}</strong>.
+    </div>
+    {% endif %}
+    {% if message != 'Votre compte a été activé avec succès' %} {# 'message est ici la variable qui povient de la route renseignée dans CategotyController.php #}
+    <div class="alert alert-dismissible alert-danger w-50 mx-auto mt-5 text-center">
+        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        <strong>{{ message }}</strong>.
+    </div>
+    {% endif %}
+{% endblock %}
