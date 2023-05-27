@@ -4,10 +4,10 @@
 # Put parameters here that don't need to change on each machine where the app is deployed
 # https://symfony.com/doc/current/best_practices.html#use-parameters-for-application-configuration
 parameters:
-    tva: '%env(TVA)%' #//!cette clé se trouve dans le fichier .env et porte le nom de 'TVA'
-    auteur: '%env(AUTEUR)%' #//!cette clé se trouve dans le fichier .env et porte le nom de 'AUTEUR'
-    comptemail: '%env(COMPTEMAIL)%' #//!cette clé se trouve dans le fichier .env et porte le nom de 'COMPTEMAIL'
-    passmail: '%env(PASSMAIL)%'#//!cette clé se trouve dans le fichier .env et porte le nom de 'PASSMAIL'
+    tva: '%env(TVA)%'
+    auteur: '%env(AUTEUR)%' 
+    accountmail: '%env(ACCOUNTMAIL)%'
+    passmail: '%env(PASSMAIL)%'
 services:
     # default configuration for services in *this* file
     _defaults:
