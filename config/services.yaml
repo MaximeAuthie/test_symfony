@@ -8,6 +8,7 @@ parameters:
     auteur: '%env(AUTEUR)%' 
     accountmail: '%env(ACCOUNTMAIL)%'
     passmail: '%env(PASSMAIL)%'
+    token: '%env(TOKEN)%'
 services:
     # default configuration for services in *this* file
     _defaults:
