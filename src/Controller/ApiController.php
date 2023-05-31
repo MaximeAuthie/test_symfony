@@ -8,6 +8,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
 use App\Repository\UserRepository;
 use App\Service\ApiRegister;
+use Symfony\Component\Serializer\SerializerInterface;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 
 use function PHPUnit\Framework\isEmpty;
@@ -58,14 +59,29 @@ class ApiController extends AbstractController
         }
     }
 
-    #[Route('/api/identification', name: 'app_api_identification ', methods: 'GET')]
-    public function getToken(Request $request, UserPasswordHasherInterface $userPasswordHasherInterface, ApiRegister $apiRegister, UserRepository $userRepository)
+    #[Route('/api/identification', name: 'app_api_identification ', methods: 'POST')]
+    public function getToken(Request $request, UserPasswordHasherInterface $userPasswordHasherInterface, ApiRegister $apiRegister, UserRepository $userRepository, SerializerInterface $serializerInterface)
     {
         try {
-            // On récupère les données du GET
-            $userEmail = $request->query->get('email');
-            $userPassword = $request->query->get('password');
+            // On récupère le fichier json
+            $json = $request->getContent();
             
+            // On vérifie que le json n'est pas vide
+            if (!$json) {
+                return $this->json(
+                    ['Erreur' => 'Le json est vide ou n\'esiste pas.'],
+                    400,
+                    ['Content-Type'=>'application/json','Access-Control-Allow-Origin' =>'localhost', 'Access-Control-Allow-Method' => 'GET'], 
+                    [] ); 
+            }
+
+            //On transforme le json en tableau grace à SerializerInterface
+            $data= $serializerInterface->decode($json,'json');
+        
+            //On récupère les datas du json
+            $userEmail= $data['email'];
+            $userPassword= $data['password'];
+
             // On récupère la clé de chiffrement
             $key = $this->getParameter('token');
 
@@ -88,7 +104,7 @@ class ApiController extends AbstractController
                     
                     // Si l'authentification n'est pas valide, on retourne ce json
                     return $this->json(
-                        ['Connexion' => 'Invalide'],
+                        ['Erreur' => 'Connexion invalide'],
                         401, 
                         ['Content-Type'=>'application/json','Access-Control-Allow-Origin' =>'*', 'Access-Control-Allow-Method' => 'GET'], 
                         []
@@ -141,5 +157,10 @@ class ApiController extends AbstractController
             );
         }
 
+    }
+
+    #[Route('/api/localToken', name: 'app_api_local_token ')]
+    public function localToken():Response {
+        return $this->render('api/local.html.twig');
     }
 }

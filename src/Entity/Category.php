@@ -6,7 +6,7 @@ use App\Repository\CategoryRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
-use Symfony\Component\Serializer\Annotation\Groups; //nécessaire pour les API
+use Symfony\Component\Serializer\Annotation\Groups; //nécessaire pour définir les groupes pour les API (à ajouter)
 
 #[ORM\Entity(repositoryClass: CategoryRepository::class)]
 class Category
